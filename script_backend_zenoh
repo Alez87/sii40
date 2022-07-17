@@ -1,0 +1,57 @@
+#! /usr/bin/env bash
+
+#script node
+while [[ "$#" -gt 0 ]];
+do
+    case $1 in
+        -h|--help)
+            echo "options:"
+            echo "-h, --help         show brief help"
+            echo "-a, --api_port     specify zenoh api listening port"
+            echo "-p, --port         specify zenoh listening port"
+            echo "-c, --connection   specify zenoh url-port connection"
+            echo "-n, --node         specify node name"
+            echo "-b, --backend      specify the backend fs root"
+            exit 0 ;;
+        -a|--api_port) shift; api_port="$1"; shift ;;
+        -p|--port) shift; port="$1"; shift ;;
+        -c|--connection) shift; connection="$1"; shift ;;
+        -n|--node) shift; node="$1"; shift ;;
+        -b|--backend) shift; backend="$1"; shift ;;
+        *) echo "Unknown parameter passed: $1"; shift ;;
+    esac
+done
+
+echo "API Port: $api_port"
+echo "Port: $port"
+echo "Connection: $connection"
+echo "Node name: $node"
+echo "Backend FS root: $backend"
+echo
+
+#ZBACKEND_FS_ROOT="$HOME/.zenoh/zbackend_fs_${node}"
+ZBACKEND_FS_ROOT=${backend}
+echo "Setting the filesystem root: $ZBACKEND_FS_ROOT"
+export ZBACKEND_FS_ROOT=${ZBACKEND_FS_ROOT}
+mkdir -p ${ZBACKEND_FS_ROOT}
+
+ZENOH_ROOT="$HOME/zenoh"
+echo "Setting the Zenoh root: $ZENOH_ROOT"
+echo
+cd ${ZENOH_ROOT}
+
+echo "Starting Zenoh..."
+if [ -z "$connection" ]
+then
+    #ZENOH_OPTIONS=" -c /home/alessandro/demo/zenoh.json5 -l tcp/127.0.0.1:${port} --rest-http-port ${api_port} "
+    ZENOH_OPTIONS=" -l tcp/127.0.0.1:${port} --rest-http-port ${api_port} "
+else
+    #ZENOH_OPTIONS=" -c /home/alessandro/demo/zenoh.json5 -l tcp/127.0.0.1:${port} -e tcp/127.0.0.1:${connection} --rest-http-port ${api_port} "
+    ZENOH_OPTIONS=" -l tcp/127.0.0.1:${port} -e tcp/127.0.0.1:${connection} --rest-http-port ${api_port} "
+fi
+
+echo "Options: $ZENOH_OPTIONS"
+./target/release/zenohd ${ZENOH_OPTIONS} &
+
+echo "Zenoh started with api_port ${api_port} and port ${port}"
+echo

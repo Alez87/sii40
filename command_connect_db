@@ -1,0 +1,26 @@
+
+# to create backend
+curl -X PUT -H 'content-type:application/properties' -d "url=http://localhost:8086"
+
+curl -X PUT -H 'content-type:application/properties' -d "url=http://localhost:8086" http://localhost:8001/@/router/local/plugin/storages/backend/influxdb
+
+# to list backend
+curl http://localhost:8001/@/router/local/plugin/storages/backend/influxdb
+
+# to create storage
+curl -X PUT -H 'content-type:application/properties' -d "path_expr=/demo/example/**;path_prefix=/demo/example;on_closure=drop_series;db=example;create_db" http://localhost:8001/@/router/local/plugin/storages/backend/influxdb/storage/example
+
+# to list storage
+curl http://localhost:8001/@/router/local/plugin/storages/backend/influxdb/storage/example
+
+# to delete storage
+curl curl -X DELETE http://localhost:8001/@/router/local/plugin/storages/backend/influxdb/storage/example
+
+# send data to influx
+curl -X PUT -d "TEST-1" http://localhost:8001/demo/example/test
+curl -X PUT -d "TEST-2" http://localhost:8001/demo/example/test
+
+curl GET http://localhost:8001/demo/example/test
+
+
+select * from "/test"
