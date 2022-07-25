@@ -1,7 +1,5 @@
 
 # to create backend
-curl -X PUT -H 'content-type:application/properties' -d "url=http://localhost:8086"
-
 curl -X PUT -H 'content-type:application/properties' -d "url=http://localhost:8086" http://localhost:8001/@/router/local/plugin/storages/backend/influxdb
 
 # to list backend

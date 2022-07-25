@@ -43,10 +43,8 @@ cd ${ZENOH_ROOT}
 echo "Starting Zenoh..."
 if [ -z "$connection" ]
 then
-    #ZENOH_OPTIONS=" -c /home/alessandro/demo/zenoh.json5 -l tcp/127.0.0.1:${port} --rest-http-port ${api_port} "
     ZENOH_OPTIONS=" -l tcp/127.0.0.1:${port} --rest-http-port ${api_port} "
 else
-    #ZENOH_OPTIONS=" -c /home/alessandro/demo/zenoh.json5 -l tcp/127.0.0.1:${port} -e tcp/127.0.0.1:${connection} --rest-http-port ${api_port} "
     ZENOH_OPTIONS=" -l tcp/127.0.0.1:${port} -e tcp/127.0.0.1:${connection} --rest-http-port ${api_port} "
 fi
 
